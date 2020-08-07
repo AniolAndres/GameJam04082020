@@ -5,16 +5,22 @@ using UnityEngine;
 public class PlayerBehavior : MonoBehaviour
 {
     public float movementSpeed;
+    public float sprintMultiplier = 2.0f;
+    public float slowMultiplier = 0.5f;
 
     void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
-        float moveVertical = Input.GetAxisRaw("Vertical");
+        Vector3 movementDirection;
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15F);
+        movementDirection.x = Input.GetAxisRaw("Horizontal");
+        movementDirection.z = Input.GetAxisRaw("Vertical");
+        movementDirection.y = 0;
 
-        transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
+        float sprintSpeedMultiplier = Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1.0f;
+        float slowSpeedMultiplier = Input.GetKey(KeyCode.LeftControl) ? slowMultiplier : 1.0f;
+
+
+        transform.position += movementDirection * movementSpeed * Time.deltaTime * sprintSpeedMultiplier * slowSpeedMultiplier;
     }
 
 }
