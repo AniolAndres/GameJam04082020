@@ -481,18 +481,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24220bc593f7b454cac0b153b15bc3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mFocusTime: 10
+  mFocusTime: 3
   mAlertTexts:
-  - mFloatValue: 50
-    mStringValue: ASALBO
-  - mFloatValue: 15
-    mStringValue: BAJAL ERTA
-  - mFloatValue: 10
-    mStringValue: MEDIA ALERTA
   - mFloatValue: 5
-    mStringValue: ALERTA MASIMA
-  - mFloatValue: 2
-    mStringValue: MES CAPO
+    mStringValue: MU SERKA
+  - mFloatValue: 8
+    mStringValue: PASAS COBID
+  - mFloatValue: 15
+    mStringValue: UYITO
+  - mFloatValue: 20
+    mStringValue: SEGURIDA
+  - mFloatValue: 50
+    mStringValue: SALBO
   CurrentState: 0
   mDetectionWarning: {fileID: 1725952835}
   mRobber: {fileID: 145410863}
