@@ -6,36 +6,15 @@ public class PlayerBehavior : MonoBehaviour
 {
     public float movementSpeed;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     void FixedUpdate()
     {
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey("w"))
-        {
-            transform.position += transform.TransformDirection(Vector3.forward) * Time.deltaTime * movementSpeed * 2.5f;
-        }
-        else if (Input.GetKey("w") && !Input.GetKey(KeyCode.LeftShift))
-        {
-            transform.position += transform.TransformDirection(Vector3.forward) * Time.deltaTime * movementSpeed;
-        }
-        else if (Input.GetKey("s"))
-        {
-            transform.position -= transform.TransformDirection(Vector3.forward) * Time.deltaTime * movementSpeed;
-        }
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15F);
 
-        if (Input.GetKey("a") && !Input.GetKey("d"))
-        {
-            transform.position += transform.TransformDirection(Vector3.left) * Time.deltaTime * movementSpeed;
-        }
-        else if (Input.GetKey("d") && !Input.GetKey("a"))
-        {
-            transform.position -= transform.TransformDirection(Vector3.left) * Time.deltaTime * movementSpeed;
-        }
+        transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
     }
 
 }
