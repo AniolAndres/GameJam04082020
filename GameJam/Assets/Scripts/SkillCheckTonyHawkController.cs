@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class SkillCheckTonyHawkController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField] private Renderer myRenderer;
         
+    public void Start()
+    {
+        myRenderer = gameObject.GetComponent<Renderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void UpdateBarPosition(float position)
     {
-        
+        myRenderer.material.SetFloat("_MarkPosition", position);
     }
+
 }

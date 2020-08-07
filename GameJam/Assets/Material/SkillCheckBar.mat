@@ -63,8 +63,8 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MarkPosition: 0.5
-    - _MarkWidth: 0.1
+    - _MarkPosition: 0.45
+    - _MarkWidth: 0.04
     - _Max: 0.75
     - _Metallic: 0
     - _Min: 0.25

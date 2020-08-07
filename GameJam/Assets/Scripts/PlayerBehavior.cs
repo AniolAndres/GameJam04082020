@@ -17,6 +17,8 @@ public class PlayerBehavior : MonoBehaviour
     public bool startSkillCheck;
     private bool inSkillCheck;
 
+    [SerializeField] SkillCheckTonyHawkController scScript;
+
     public float markPosition = 0.0f;
     public float currentSpeed = 0.001f;
     public float currentAcceleration = 0.0f;
@@ -34,18 +36,18 @@ public class PlayerBehavior : MonoBehaviour
 
             if (Input.GetKey(KeyCode.A))
             {
-                currentAcceleration -= 1.0f;
+                currentAcceleration += 2.0f;
             }
             if (Input.GetKey(KeyCode.D))
             {
-                currentAcceleration += 1.0f;
+                currentAcceleration -= 2.0f;
             }
 
             currentSpeed += currentAcceleration * Time.deltaTime;
-            markPosition += currentSpeed * Time.deltaTime * 0.01f;
+            markPosition += currentSpeed * Time.deltaTime;
 
-            markPosition = Mathf.Clamp(markPosition, -100.0f, 100.0f);
-
+            markPosition = Mathf.Clamp(markPosition, -1.0f, 1.0f);
+            scScript.UpdateBarPosition(markPosition);
             duration -= Time.deltaTime;
             yield return null;
         }
