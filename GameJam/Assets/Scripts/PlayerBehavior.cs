@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
+    [Header("Victim references")]
+
+    public VictimBehavior victim;
+
     [Header("Movement Zone")]
 
     public float movementSpeed;
@@ -17,42 +21,57 @@ public class PlayerBehavior : MonoBehaviour
     public bool startSkillCheck;
     private bool inSkillCheck;
 
-    [SerializeField] SkillCheckTonyHawkController scScript;
+    [SerializeField] private SkillCheckTonyHawkController scScript;
+    [SerializeField] private GameObject barGO;
 
-    public float markPosition = 0.0f;
-    public float currentSpeed = 0.001f;
-    public float currentAcceleration = 0.0f;
 
     private IEnumerator SkillCheckTonyHawkStyle()
     {
-        //TODO: (aniol) MAKE THIS VARIABLES GREAT (and local) AGAIN
+
         float duration = skillCheckDuration;
-        //float markPosition = 0.0f;
-        //float currentSpeed = 1.0f;
-        while(duration >= 0.0f)
+        float currentAcceleration = 0.0f;
+        float markPosition = 0.5f;
+        float currentSpeed = 0.05f;
+        bool skillcheckFailed = false;
+        //TODO: (aniol) this has to be retreived from the victim
+        float minPercent = 0.15f;
+        float maxPercent = 0.85f;
+        scScript.RefreshBarLimits(minPercent, maxPercent);
+ 
+
+        while (duration >= 0.0f && !skillcheckFailed)
         {
-            //float currentAcceleration = 0.0f;
-            currentAcceleration = 0.0f;
 
             if (Input.GetKey(KeyCode.A))
             {
-                currentAcceleration += 2.0f;
+                currentAcceleration += 4.0f;
             }
             if (Input.GetKey(KeyCode.D))
             {
-                currentAcceleration -= 2.0f;
+                currentAcceleration -= 4.0f;
             }
+
+            currentAcceleration = Mathf.Clamp(currentAcceleration, -2.0f, 2.0f);
 
             currentSpeed += currentAcceleration * Time.deltaTime;
             markPosition += currentSpeed * Time.deltaTime;
 
-            markPosition = Mathf.Clamp(markPosition, -1.0f, 1.0f);
+            markPosition = Mathf.Clamp(markPosition, 0.0f, 1.0f);
             scScript.UpdateBarPosition(markPosition);
+
+            if(markPosition < minPercent || markPosition > maxPercent)
+            {
+                skillcheckFailed = true;
+            }
+
+
             duration -= Time.deltaTime;
+
             yield return null;
         }
-        inSkillCheck = false;
 
+        inSkillCheck = false;
+        barGO.SetActive(false);
 
     }
 
@@ -61,6 +80,7 @@ public class PlayerBehavior : MonoBehaviour
         if (startSkillCheck)
         {
             inSkillCheck = true;
+            barGO.SetActive(true);
             StartCoroutine("SkillCheckTonyHawkStyle");
             startSkillCheck = false;
 

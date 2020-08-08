@@ -5,10 +5,12 @@ using UnityEngine;
 public class SkillCheckTonyHawkController : MonoBehaviour
 {
     [SerializeField] private Renderer myRenderer;
-        
-    public void Start()
+       
+
+    public void RefreshBarLimits(float min, float max)
     {
-        myRenderer = gameObject.GetComponent<Renderer>();
+        myRenderer.material.SetFloat("_Min", min);
+        myRenderer.material.SetFloat("_Max", max);
     }
 
 

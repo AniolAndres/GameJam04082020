@@ -49,7 +49,7 @@
 
 				float pi = 3.1415f;
 				float remap = Remap(v.uv.x, 0.0f, 1.0f, -pi, 0.0f);
-				float sine = 30.0f * sin(- remap);
+				float sine = 50.0f * sin(- remap);
 				initialPosition.z = initialPosition.z + sine;
                 o.vertex = UnityObjectToClipPos(initialPosition);
 				o.uv = v.uv;
