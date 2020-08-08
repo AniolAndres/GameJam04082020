@@ -62,6 +62,12 @@ public class StartGame : MonoBehaviour
     {
         float interpolation = 0.75f * Time.deltaTime;
 
+        if(interpolation >= 10.0f)
+        {
+            interpolation = 1.0f;
+            isLerpingToPlayer = false;
+        }
+
         Vector3 position = gameCamera.transform.position;
         position.z = Mathf.Lerp(gameCamera.transform.position.z, playerPosition.transform.Find("CameraPosition").position.z, interpolation);
         position.x = Mathf.Lerp(gameCamera.transform.position.x, playerPosition.transform.Find("CameraPosition").position.x, interpolation);
@@ -94,11 +100,10 @@ public class StartGame : MonoBehaviour
     {
         isLerpingToPlayer = true;
 
-        while (gameCamera.transform.position.z >= playerPosition.transform.position.z + 1)
+        while (isLerpingToPlayer)
             yield return null;
 
-        isLerpingToPlayer = false;
-
+        
         StartCoroutine("EnablePlayerMovement");
         
     }
