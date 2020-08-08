@@ -36,7 +36,7 @@ public class VictimBehavior : MonoBehaviour
     public eAlertState CurrentState = eAlertState.Safe;
 
     public GameObject mDetectionWarning;     //visual alert of the current alert state
-    public GameObject mRobber;               //reference to the robber
+    public PlayerBehavior mRobber;               //reference to the robber
 
     //TODO(@Roger): each time  
     ///////////////// Methods
@@ -67,9 +67,9 @@ public class VictimBehavior : MonoBehaviour
             float distractedX = transform.position.x - transform.forward.x;
             float distractedY = transform.position.y;
             float distractedZ = transform.position.z - transform.forward.z;
-            Debug.Log("PARO MIRAR");
             Vector3 LookAtPos = new Vector3(distractedX, distractedY, distractedZ);
             transform.LookAt(LookAtPos);
+            mRobber.ReceiveSkillCheckNotification(false);
             return;
         }
         transform.LookAt(mRobber.transform.position);
@@ -90,6 +90,7 @@ public class VictimBehavior : MonoBehaviour
                 {
                     mTimeLooking = 0;
                     mFollowingPlayer = true;
+                    mRobber.ReceiveSkillCheckNotification(true);
                 }
 
                 //set vars up
@@ -101,11 +102,5 @@ public class VictimBehavior : MonoBehaviour
             ++iterator;
         }
     }
-    IEnumerator TurnAndLook(int seconds)
-    {
-        mDetectionWarning.SetActive(true);
-        Debug.Log("Yo' something happening " + seconds);
-        yield return new WaitForSeconds(seconds);
-        mDetectionWarning.SetActive(false);
-    }
+
 }
