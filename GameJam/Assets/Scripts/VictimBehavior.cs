@@ -26,6 +26,7 @@ public class VictimBehavior : MonoBehaviour
     };
 
     ///////////////// Vars
+    public float mDistanceThreshold;
     public float mFocusTime;
     private float mTimeLooking = 0.0f;
     private bool mFollowingPlayer = false;
@@ -83,10 +84,16 @@ public class VictimBehavior : MonoBehaviour
         int iterator = 0;
         foreach (var Dist in mAlertTexts)
         {
-            if(dist < Dist.mFloatValue)
+            float CurrentThreshold = mDistanceThreshold;
+            //if we are not in this state, our threshold is negative
+            if ((int)CurrentState != iterator)
+            {
+                CurrentThreshold *= -1;
+            }
+            if (dist < (Dist.mFloatValue + CurrentThreshold))
             {
                 //now we look at player if he got closer
-                if((int)CurrentState > iterator)
+                if ((int)CurrentState > iterator)
                 {
                     mTimeLooking = 0;
                     mFollowingPlayer = true;
@@ -99,6 +106,7 @@ public class VictimBehavior : MonoBehaviour
 
                 return;
             }
+
             ++iterator;
         }
     }
