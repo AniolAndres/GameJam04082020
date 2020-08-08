@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class PlayerBehavior : MonoBehaviour
 
     [Header("Skillcheck zone")]
 
-    public float skillCheckDuration = 10.0f;
+    public float ignoreInputDelaySkillcheck = 0.7f;
     public bool startSkillCheck;
     private bool inSkillCheck;
+
+    private bool isInGameOver = false;
 
     [SerializeField] private SkillCheckTonyHawkController scScript;
     [SerializeField] private GameObject barGO;
@@ -40,8 +43,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private IEnumerator SkillCheckTonyHawkStyle()
     {
-
-        float duration = skillCheckDuration;
+        float timer = 0.0f;
         float currentAcceleration = 0.0f;
         float markPosition = 0.5f;
         float currentSpeed = 0.05f;
@@ -54,15 +56,16 @@ public class PlayerBehavior : MonoBehaviour
 
         while (inSkillCheck && !skillcheckFailed)
         {
-            Debug.Log("DOREMON");
-
-            if (Input.GetKey(KeyCode.A))
+            if(ignoreInputDelaySkillcheck < timer)
             {
-                currentAcceleration += 4.0f;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                currentAcceleration -= 4.0f;
+                if (Input.GetKey(KeyCode.A))
+                {
+                    currentAcceleration += 4.0f;
+                }
+                if (Input.GetKey(KeyCode.D))
+                {
+                    currentAcceleration -= 4.0f;
+                }
             }
 
             currentAcceleration = Mathf.Clamp(currentAcceleration, -2.0f, 2.0f);
@@ -76,10 +79,11 @@ public class PlayerBehavior : MonoBehaviour
             if(markPosition < minPercent || markPosition > maxPercent)
             {
                 skillcheckFailed = true;
+                StartCoroutine("GameOverRoutine");
             }
 
 
-            duration -= Time.deltaTime;
+            timer += Time.deltaTime;
 
             yield return null;
         }
@@ -92,10 +96,20 @@ public class PlayerBehavior : MonoBehaviour
     {
         mTheftStarted = true;
         mRobbing = true;
-        
+
         mRobGO.SetActive(true);
 
         mRobScript.RefreshBarLimits(0.4f, 0.6f); //yes xd
+
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        isInGameOver = true;
+
+        yield return new WaitForSeconds(5.0f);
+
+        SceneManager.LoadScene("GrayBox");
     }
 
     public void ReceiveSkillCheckNotification(bool enable)
@@ -162,7 +176,7 @@ public class PlayerBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (inSkillCheck) return;
+        if (inSkillCheck || isInGameOver) return;
         Vector3 movementDirection;
 
         movementDirection.x = Input.GetAxisRaw("Horizontal");
@@ -172,7 +186,7 @@ public class PlayerBehavior : MonoBehaviour
         float sprintSpeedMultiplier = Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1.0f;
         float slowSpeedMultiplier = Input.GetKey(KeyCode.LeftControl) ? slowMultiplier : 1.0f;
 
-
+        transform.rotation = Quaternion.LookRotation(movementDirection);
         transform.position += movementDirection * movementSpeed * Time.deltaTime * sprintSpeedMultiplier * slowSpeedMultiplier;
     }
 
