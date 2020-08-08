@@ -409,3 +409,8 @@ MonoBehaviour:
   startSkillCheck: 0
   scScript: {fileID: 7325672294570959262}
   barGO: {fileID: 7325672294570959259}
+  mTheftDuration: 20
+  mTheftStarted: 0
+  mTheftMarkSpeed: 2
+  mRobScript: {fileID: 936579014}
+  mRobGO: {fileID: 936579012}

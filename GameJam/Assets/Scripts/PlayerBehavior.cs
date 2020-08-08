@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -21,9 +22,24 @@ public class PlayerBehavior : MonoBehaviour
     public bool startSkillCheck;
     private bool inSkillCheck;
 
+    private bool isInGameOver = false;
+
     [SerializeField] private SkillCheckTonyHawkController scScript;
     [SerializeField] private GameObject barGO;
 
+    [Header("Theft skillcheck")]
+
+    public float    mTheftDuration = 10.0f;
+    private float   mCurrentTheftDuration = 0.0f;
+    private bool    mMissed = false;
+    public bool     mTheftStarted = false;
+    private bool    mRobbing = false;
+
+    public float mTheftMarkSpeed = 1;
+    private float mMarkPosition = 0.01f;
+
+    [SerializeField] private SkillCheckRobeti mRobScript;
+    [SerializeField] private GameObject mRobGO;
 
     private IEnumerator SkillCheckTonyHawkStyle()
     {
@@ -63,6 +79,7 @@ public class PlayerBehavior : MonoBehaviour
             if(markPosition < minPercent || markPosition > maxPercent)
             {
                 skillcheckFailed = true;
+                StartCoroutine("GameOverRoutine");
             }
 
 
@@ -75,27 +92,91 @@ public class PlayerBehavior : MonoBehaviour
 
     }
 
+    public void StartStealing()
+    {
+        mTheftStarted = true;
+        mRobbing = true;
+
+        mRobGO.SetActive(true);
+
+        mRobScript.RefreshBarLimits(0.4f, 0.6f); //yes xd
+
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        isInGameOver = true;
+
+        yield return new WaitForSeconds(5.0f);
+
+        SceneManager.LoadScene("GrayBox");
+    }
+
     public void ReceiveSkillCheckNotification(bool enable)
     {
         startSkillCheck = enable;
         inSkillCheck = enable;
     }
 
+    private void UpdateRobSkillcheck()
+    {
+        if(mCurrentTheftDuration >= mTheftDuration || mMissed)
+        {
+            //TODO: End game, lost
+            mTheftStarted = false;
+            mRobbing = false;
+            mRobGO.SetActive(false);
+            Debug.Log("PIERDES PUTO TONTO");
+            return;
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if(0.4f <= mMarkPosition && mMarkPosition <= 0.6f)
+            {
+                //TODO: WIN
+                Debug.Log("GANAS PUTO TONTO");
+                mTheftStarted = false;
+                mRobbing = false;
+                mRobGO.SetActive(false);
+                return;
+            }
+            else
+            {
+                //TODO: End game, lost
+                mTheftStarted = false;
+                mRobbing = false;
+                mRobGO.SetActive(false);
+                Debug.Log("PIERDES PUTO TONTO");
+                return;
+            }
+        }
+        mMarkPosition += mTheftMarkSpeed * Time.deltaTime;
+
+        mMarkPosition = Mathf.Clamp(mMarkPosition, 0.0f, 1.0f);
+        mRobScript.UpdateBarPosition(mMarkPosition);
+
+    }
+
     private void Update()
     {
+        mRobGO.SetActive(true);
         if (startSkillCheck)
         {
             inSkillCheck = true;
             barGO.SetActive(true);
             StartCoroutine("SkillCheckTonyHawkStyle");
             startSkillCheck = false;
-
+        }
+        if(mRobbing)
+        {
+            mCurrentTheftDuration += Time.deltaTime;
+            UpdateRobSkillcheck();
         }
     }
 
     void FixedUpdate()
     {
-        if (inSkillCheck) return;
+        if (inSkillCheck || isInGameOver) return;
         Vector3 movementDirection;
 
         movementDirection.x = Input.GetAxisRaw("Horizontal");
