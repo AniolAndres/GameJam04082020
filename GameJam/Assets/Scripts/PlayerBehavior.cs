@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PlayerBehavior : MonoBehaviour
     public float ignoreInputDelaySkillcheck = 0.7f;
     public bool startSkillCheck;
     private bool inSkillCheck;
+
+    private bool isInGameOver = false;
 
     [SerializeField] private SkillCheckTonyHawkController scScript;
     [SerializeField] private GameObject barGO;
@@ -63,6 +66,7 @@ public class PlayerBehavior : MonoBehaviour
             if(markPosition < minPercent || markPosition > maxPercent)
             {
                 skillcheckFailed = true;
+                StartCoroutine("GameOverRoutine");
             }
 
 
@@ -73,6 +77,15 @@ public class PlayerBehavior : MonoBehaviour
 
         barGO.SetActive(false);
 
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        isInGameOver = true;
+
+        yield return new WaitForSeconds(5.0f);
+
+        SceneManager.LoadScene("GrayBox");
     }
 
     public void ReceiveSkillCheckNotification(bool enable)
@@ -95,7 +108,7 @@ public class PlayerBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (inSkillCheck) return;
+        if (inSkillCheck || isInGameOver) return;
         Vector3 movementDirection;
 
         movementDirection.x = Input.GetAxisRaw("Horizontal");

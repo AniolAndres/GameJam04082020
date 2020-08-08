@@ -57,7 +57,6 @@ public class StartGame : MonoBehaviour
         {
             Vector3 targetPosition = playerPosition.transform.position + cameraFollowDisplacement;
             gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, targetPosition, smoothFactorCamera * Time.deltaTime);
-            //gameCamera.transform.position = Vector3.SmoothDamp(gameCamera.transform.position, targetPosition, ref velocity, smoothTimeCameraFollow);
         }
     }
 
