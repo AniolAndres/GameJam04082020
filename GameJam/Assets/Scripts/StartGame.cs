@@ -15,6 +15,8 @@ public class StartGame : MonoBehaviour
     // Camera behavior
     public Vector3 cameraFollowDisplacement = new Vector3(0, 2.5f, -0);
     public float smoothTimeCameraFollow = 0.3F;
+    public float cameraLerpDuration = 2.0f;
+    public float lerpTimer = 0.0f;
 
     private Text goText;
     private bool isPreviewingVictim;
@@ -23,10 +25,13 @@ public class StartGame : MonoBehaviour
     private bool cameraFollowPlayer;
     private Vector3 velocity = Vector3.zero;
 
+    private Vector3 cameraInitialPosition;
+
     void Start()
     {
         goText = transform.GetComponentInChildren<Text>();
         StartCoroutine("EnableVictimPreview");
+        cameraInitialPosition = gameCamera.transform.position;
     }
 
     private void FixedUpdate()
@@ -60,17 +65,19 @@ public class StartGame : MonoBehaviour
 
     void LerpCameraToPlayer()
     {
-        float interpolation = 0.75f * Time.deltaTime;
+        lerpTimer += Time.deltaTime;
 
-        if(interpolation >= 10.0f)
+        float interpolation = lerpTimer / cameraLerpDuration;
+
+        if (interpolation >= 1.0f)
         {
             interpolation = 1.0f;
             isLerpingToPlayer = false;
         }
 
         Vector3 position = gameCamera.transform.position;
-        position.z = Mathf.Lerp(gameCamera.transform.position.z, playerPosition.transform.Find("CameraPosition").position.z, interpolation);
-        position.x = Mathf.Lerp(gameCamera.transform.position.x, playerPosition.transform.Find("CameraPosition").position.x, interpolation);
+        position.z = Mathf.Lerp(cameraInitialPosition.z, playerPosition.transform.Find("CameraPosition").position.z, interpolation);
+        position.x = Mathf.Lerp(cameraInitialPosition.x, playerPosition.transform.Find("CameraPosition").position.x, interpolation);
 
         gameCamera.transform.LookAt(playerPosition.transform);
         gameCamera.transform.position = position;

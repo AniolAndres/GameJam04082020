@@ -630,8 +630,10 @@ MonoBehaviour:
   gameCamera: {fileID: 741789143}
   victimPosition: {fileID: 571949541}
   playerPosition: {fileID: 103317164}
-  cameraFollowDisplacement: {x: 0, y: 2.5, z: 0}
+  cameraFollowDisplacement: {x: 0, y: 2.94, z: -3.24}
   smoothTimeCameraFollow: 0.3
+  cameraLerpDuration: 2
+  lerpTimer: 0
 --- !u!4 &541058229
 Transform:
   m_ObjectHideFlags: 0
@@ -1208,6 +1210,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 110842527, guid: b674ad8f8b3dc374892e053d27952a33, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 110842527, guid: b674ad8f8b3dc374892e053d27952a33, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7325672295773935752, guid: b674ad8f8b3dc374892e053d27952a33,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1282,7 +1292,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1462402989}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 103317164}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25fd8869328986b45beab968ce433a5a, type: 3}
   m_Name: 

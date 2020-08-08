@@ -17,7 +17,7 @@ public class PlayerBehavior : MonoBehaviour
 
     [Header("Skillcheck zone")]
 
-    public float skillCheckDuration = 10.0f;
+    public float ignoreInputDelaySkillcheck = 0.7f;
     public bool startSkillCheck;
     private bool inSkillCheck;
 
@@ -27,8 +27,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private IEnumerator SkillCheckTonyHawkStyle()
     {
-
-        float duration = skillCheckDuration;
+        float timer = 0.0f;
         float currentAcceleration = 0.0f;
         float markPosition = 0.5f;
         float currentSpeed = 0.05f;
@@ -41,14 +40,16 @@ public class PlayerBehavior : MonoBehaviour
 
         while (inSkillCheck && !skillcheckFailed)
         {
-
-            if (Input.GetKey(KeyCode.A))
+            if(ignoreInputDelaySkillcheck < timer)
             {
-                currentAcceleration += 4.0f;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                currentAcceleration -= 4.0f;
+                if (Input.GetKey(KeyCode.A))
+                {
+                    currentAcceleration += 4.0f;
+                }
+                if (Input.GetKey(KeyCode.D))
+                {
+                    currentAcceleration -= 4.0f;
+                }
             }
 
             currentAcceleration = Mathf.Clamp(currentAcceleration, -2.0f, 2.0f);
@@ -65,7 +66,7 @@ public class PlayerBehavior : MonoBehaviour
             }
 
 
-            duration -= Time.deltaTime;
+            timer += Time.deltaTime;
 
             yield return null;
         }
