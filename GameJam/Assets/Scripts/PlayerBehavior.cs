@@ -39,7 +39,7 @@ public class PlayerBehavior : MonoBehaviour
         scScript.RefreshBarLimits(minPercent, maxPercent);
  
 
-        while (duration >= 0.0f && !skillcheckFailed)
+        while (inSkillCheck && !skillcheckFailed)
         {
 
             if (Input.GetKey(KeyCode.A))
@@ -70,9 +70,14 @@ public class PlayerBehavior : MonoBehaviour
             yield return null;
         }
 
-        inSkillCheck = false;
         barGO.SetActive(false);
 
+    }
+
+    public void ReceiveSkillCheckNotification(bool enable)
+    {
+        startSkillCheck = enable;
+        inSkillCheck = enable;
     }
 
     private void Update()
