@@ -92,14 +92,20 @@ public class VictimBehavior : MonoBehaviour
             }
             if (dist < (Dist.mFloatValue + CurrentThreshold))
             {
-                //now we look at player if he got closer
+                //if closest distance, we just rob and end
                 if ((int)CurrentState > iterator)
                 {
-                    mTimeLooking = 0;
-                    mFollowingPlayer = true;
-                    mRobber.ReceiveSkillCheckNotification(true);
+                    if(iterator == 0)
+                    {
+                        mRobber.StartStealing();
+                    }
+                    else
+                    {
+                        mTimeLooking = 0;
+                        //mFollowingPlayer = true;
+                        //mRobber.ReceiveSkillCheckNotification(true);
+                    }
                 }
-
                 //set vars up
                 CurrentState = (eAlertState)iterator;
                 mDetectionWarning.GetComponent<TextMesh>().text = Dist.mStringValue;
