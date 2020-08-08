@@ -7,7 +7,7 @@ using System;
 public class StartGame : MonoBehaviour
 {
     public int maxGoSize = 150;
-    public float cameraRotationSpeed = 2.5f;
+    public float cameraRotationSpeed = 20f;
     public GameObject gameCamera;
     public GameObject victimPosition;
     public GameObject playerPosition;
@@ -54,9 +54,8 @@ public class StartGame : MonoBehaviour
     }
 
     void VictimPreview()
-    {  
-        gameCamera.transform.LookAt(victimPosition.transform);
-        gameCamera.transform.Translate(Vector3.right * cameraRotationSpeed * Time.deltaTime);
+    {
+        gameCamera.transform.RotateAround(victimPosition.transform.position, Vector3.up, cameraRotationSpeed * Time.deltaTime);
     }
 
     void LerpCameraToPlayer()
@@ -64,10 +63,10 @@ public class StartGame : MonoBehaviour
         float interpolation = 0.75f * Time.deltaTime;
 
         Vector3 position = gameCamera.transform.position;
-        position.z = Mathf.Lerp(gameCamera.transform.position.z, playerPosition.transform.position.z, interpolation);
-        position.x = Mathf.Lerp(gameCamera.transform.position.x, playerPosition.transform.position.x, interpolation);
+        position.z = Mathf.Lerp(gameCamera.transform.position.z, playerPosition.transform.Find("CameraPosition").position.z, interpolation);
+        position.x = Mathf.Lerp(gameCamera.transform.position.x, playerPosition.transform.Find("CameraPosition").position.x, interpolation);
 
-        gameCamera.transform.LookAt(playerPosition.transform.parent);
+        gameCamera.transform.LookAt(playerPosition.transform);
         gameCamera.transform.position = position;
     }
 
@@ -79,14 +78,14 @@ public class StartGame : MonoBehaviour
 
     IEnumerator EnableVictimPreview()
     {
-        victimPosition.transform.parent.Find("VictimInfo").gameObject.SetActive(true);
+        victimPosition.transform.Find("VictimInfo").gameObject.SetActive(true);
         isPreviewingVictim = true;
 
         while (!Input.anyKey)
             yield return null;
 
         isPreviewingVictim = false;
-        victimPosition.transform.parent.Find("VictimInfo").gameObject.SetActive(false);
+        victimPosition.transform.Find("VictimInfo").gameObject.SetActive(false);
 
         StartCoroutine("EnableLerpCameraToPlayer");
     }
@@ -113,7 +112,7 @@ public class StartGame : MonoBehaviour
 
         cameraFollowPlayer = true;
         isEnablingPlayerMovement = false;
-        playerPosition.transform.parent.GetComponent<PlayerBehavior>().enabled = true;
+        playerPosition.transform.GetComponent<PlayerBehavior>().enabled = true;
     }
 
 
