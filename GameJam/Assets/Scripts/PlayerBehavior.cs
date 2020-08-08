@@ -105,7 +105,7 @@ public class PlayerBehavior : MonoBehaviour
         float sprintSpeedMultiplier = Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1.0f;
         float slowSpeedMultiplier = Input.GetKey(KeyCode.LeftControl) ? slowMultiplier : 1.0f;
 
-
+        transform.rotation = Quaternion.LookRotation(movementDirection);
         transform.position += movementDirection * movementSpeed * Time.deltaTime * sprintSpeedMultiplier * slowSpeedMultiplier;
     }
 

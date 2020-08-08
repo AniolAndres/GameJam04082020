@@ -8,6 +8,7 @@ public class StartGame : MonoBehaviour
 {
     public int maxGoSize = 150;
     public float cameraRotationSpeed = 20f;
+    public Transform finalCameraPosition;
     public GameObject gameCamera;
     public GameObject victimPosition;
     public GameObject playerPosition;
@@ -17,6 +18,7 @@ public class StartGame : MonoBehaviour
     public float smoothTimeCameraFollow = 0.3F;
     public float cameraLerpDuration = 2.0f;
     public float lerpTimer = 0.0f;
+    public float smoothFactorCamera = 10.0f;
 
     private Text goText;
     private bool isPreviewingVictim;
@@ -53,8 +55,9 @@ public class StartGame : MonoBehaviour
 
         if(cameraFollowPlayer)
         {
-            Vector3 targetPosition = playerPosition.transform.TransformPoint(cameraFollowDisplacement);
-            gameCamera.transform.position = Vector3.SmoothDamp(gameCamera.transform.position, targetPosition, ref velocity, smoothTimeCameraFollow);
+            Vector3 targetPosition = playerPosition.transform.position + cameraFollowDisplacement;
+            gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, targetPosition, smoothFactorCamera * Time.deltaTime);
+            //gameCamera.transform.position = Vector3.SmoothDamp(gameCamera.transform.position, targetPosition, ref velocity, smoothTimeCameraFollow);
         }
     }
 
@@ -76,8 +79,8 @@ public class StartGame : MonoBehaviour
         }
 
         Vector3 position = gameCamera.transform.position;
-        position.z = Mathf.Lerp(cameraInitialPosition.z, playerPosition.transform.Find("CameraPosition").position.z, interpolation);
-        position.x = Mathf.Lerp(cameraInitialPosition.x, playerPosition.transform.Find("CameraPosition").position.x, interpolation);
+        position.z = Mathf.Lerp(cameraInitialPosition.z, finalCameraPosition.position.z, interpolation);
+        position.x = Mathf.Lerp(cameraInitialPosition.x, finalCameraPosition.position.x, interpolation);
 
         gameCamera.transform.LookAt(playerPosition.transform);
         gameCamera.transform.position = position;
