@@ -439,7 +439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24220bc593f7b454cac0b153b15bc3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mFocusTime: 3
+  mDistanceThreshold: 1
+  mFocusTime: 2.5
   mAlertTexts:
   - mFloatValue: 5
     mStringValue: MU SERKA

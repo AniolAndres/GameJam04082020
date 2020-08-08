@@ -1262,6 +1262,11 @@ PrefabInstance:
       propertyPath: mRobber
       value: 
       objectReference: {fileID: 456381029}
+    - target: {fileID: 5260152315695260922, guid: 92083114207dbe84eb5e5acd9367f1b9,
+        type: 3}
+      propertyPath: mDistanceThreshold
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5260152315695260923, guid: 92083114207dbe84eb5e5acd9367f1b9,
         type: 3}
       propertyPath: m_LocalPosition.x
