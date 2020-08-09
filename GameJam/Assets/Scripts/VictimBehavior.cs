@@ -37,9 +37,11 @@ public class VictimBehavior : MonoBehaviour
     public eAlertState CurrentState = eAlertState.Safe;
 
     public GameObject mDetectionWarning;     //visual alert of the current alert state
-    public PlayerBehavior mRobber;               //reference to the robber
+    public PlayerBehavior mRobber;           //reference to the robber
 
-    //TODO(@Roger): each time  
+    public float mSkillcheckCoolDown = 5;    //Cooldown Between skillchecks
+    private float mTimeSinceLastSkillCheck = 0;
+
     ///////////////// Methods
     private void Start()
     {
@@ -50,18 +52,25 @@ public class VictimBehavior : MonoBehaviour
 
     void Update()
     {
+        mTimeSinceLastSkillCheck += Time.deltaTime;
         ProximityDetection();
         if(mFollowingPlayer)
         {
             VisualFollowing();
             mTimeLooking += Time.deltaTime;
         }
+        //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
+        //keep in mind that there is a cooldown, so probably it will not be activated too often
+        if(UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates].mFloatValue) > Vector3.Distance(transform.position, mRobber.transform.position))
+        {
+            TriggerSkillcheck();
+        }
     }
 
-    void VisualFollowing()
+    //stops a skillcheck
+    void StopSkillCheck()
     {
-        //if time's up, we stop looking at player
-        if(mTimeLooking >= mFocusTime)
+        if(mFollowingPlayer)
         {
             mTimeLooking = 0;
             mFollowingPlayer = false;
@@ -70,6 +79,29 @@ public class VictimBehavior : MonoBehaviour
             float distractedZ = transform.position.z - transform.forward.z;
             Vector3 LookAtPos = new Vector3(distractedX, distractedY, distractedZ);
             transform.LookAt(LookAtPos);
+        }
+    }
+
+    //Triggers a skillcheck
+    void TriggerSkillcheck()
+    {
+        //cooldown
+        if(mTimeSinceLastSkillCheck >= mSkillcheckCoolDown)
+        {
+            mTimeLooking = 0;
+            mFollowingPlayer = true;
+            mTimeSinceLastSkillCheck = 0;
+            mRobber.ReceiveSkillCheckNotification(true);
+        }
+    }
+
+    void VisualFollowing()
+    {
+        //TODO(@Roger): move this logics to the player
+        //if time's up, we stop looking at player
+        if(mTimeLooking >= mFocusTime)
+        {
+            StopSkillCheck();
             mRobber.ReceiveSkillCheckNotification(false);
             return;
         }
@@ -101,9 +133,7 @@ public class VictimBehavior : MonoBehaviour
                     }
                     else
                     {
-                        mTimeLooking = 0;
-                        mFollowingPlayer = true;
-                        mRobber.ReceiveSkillCheckNotification(true);
+                        TriggerSkillcheck();
                     }
                 }
                 //set vars up
