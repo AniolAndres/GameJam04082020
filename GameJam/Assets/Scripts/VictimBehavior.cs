@@ -57,7 +57,8 @@ public class VictimBehavior : MonoBehaviour
         mDetectionWarning.GetComponent<TextMesh>().text = mAlertTexts[0].mStringValue;
         mAnim = gameObject.GetComponent<Animator>();
         mAlertSound = gameObject.GetComponent<AudioSource>();
-    }
+        mTimeSinceLastSkillCheck = -10;
+}
 
     private void CheckPlayRandomSkillChecks()
     {
