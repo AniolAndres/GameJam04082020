@@ -49,6 +49,11 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private SkillCheckRobeti mRobScript;
     [SerializeField] private GameObject mRobGO;
 
+    [Header("Sound")]
+    private AudioSource mFootsetpSound;
+
+    private float speedMultiplier = 1.0f;
+
     private IEnumerator SkillCheckTonyHawkStyle()
     {
         float timer = 0.0f;
@@ -174,6 +179,8 @@ public class PlayerBehavior : MonoBehaviour
     private void Start()
     {
         anim = gameObject.GetComponent<Animator>();
+        mFootsetpSound = gameObject.GetComponent<AudioSource>();
+        mFootsetpSound.Play();
     }
 
     private void Update()
@@ -219,28 +226,68 @@ public class PlayerBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (inSkillCheck || isInGameOver) return;
+        if (inSkillCheck || isInGameOver)
+        {
+            mFootsetpSound.Stop();
+            return;
+        }
         Vector3 movementDirection;
 
         movementDirection.x = Input.GetAxisRaw("Horizontal");
         movementDirection.z = Input.GetAxisRaw("Vertical");
         movementDirection.y = 0;
 
-        float speedMultiplier = 1.0f;
+        
 
         if(Input.GetKey(KeyCode.LeftShift))
         {
+            if(speedMultiplier != sprintMultiplier)
+            {
+                mFootsetpSound.Stop();
+                mFootsetpSound.Play();
+            }
             speedMultiplier = sprintMultiplier;
+            mFootsetpSound.pitch = 3.0f;
         } 
         else if (Input.GetKey(KeyCode.LeftControl))
         {
+            if (speedMultiplier != slowMultiplier)
+            {
+                mFootsetpSound.Stop();
+                mFootsetpSound.Play();
+            }
             speedMultiplier = slowMultiplier;
+            mFootsetpSound.pitch = 0.8f;
+        }
+        else if(speedMultiplier != 1.0f)
+        {
+            mFootsetpSound.Stop();
+            mFootsetpSound.Play();
+            speedMultiplier = 1.0f;
+            mFootsetpSound.pitch = 1.8f;
         }
 
         transform.rotation = Quaternion.LookRotation(movementDirection);
         transform.position += movementDirection * movementSpeed * Time.deltaTime * speedMultiplier;
         anim.SetBool("Idle", movementDirection == Vector3.zero);
         anim.SetFloat("Speed", speedMultiplier);
+
+        if(movementDirection == Vector3.zero)
+        {
+            if(mFootsetpSound.isPlaying)
+            {
+                mFootsetpSound.Stop();
+            }
+        }
+        else
+        {
+            if (!mFootsetpSound.isPlaying)
+            {
+                mFootsetpSound.Play();
+            }
+        }
+        
+        
     }
 
 }
