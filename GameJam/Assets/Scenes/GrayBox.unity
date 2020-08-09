@@ -7727,7 +7727,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Your walk speed will trigger his elder-senses!
+  m_Text: Your walk speed will trigger her elder-senses!
 --- !u!222 &1886481953
 CanvasRenderer:
   m_ObjectHideFlags: 0
