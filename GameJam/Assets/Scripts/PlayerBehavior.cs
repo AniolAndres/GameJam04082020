@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -104,10 +105,10 @@ public class PlayerBehavior : MonoBehaviour
 
     public void StartStealing()
     {
+        mRobGO.SetActive(true);
         mTheftStarted = true;
         mRobbing = true;
-        mMarkPosition = 0.0f;
-        mRobGO.SetActive(true);
+        mMarkPosition = 0.75f;
 
         mRobScript.RefreshBarLimits(0.4f, 0.6f); //yes xd
 
@@ -141,7 +142,7 @@ public class PlayerBehavior : MonoBehaviour
             StartCoroutine("GameOverRoutine");
             return;
         }
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             if(0.4f <= mMarkPosition && mMarkPosition <= 0.6f)
             {
@@ -150,7 +151,6 @@ public class PlayerBehavior : MonoBehaviour
                 Debug.Log("GANAS PUTO TONTO");
                 StartCoroutine("GameOverRoutine");
                 mTheftStarted = false;
-                mRobbing = false;
                 mRobGO.SetActive(false);
                 return;
             }
@@ -166,9 +166,10 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
         mMarkPosition += mTheftMarkSpeed * Time.deltaTime;
+        mMarkPosition = mMarkPosition % 1;
 
         mMarkPosition = Mathf.Clamp(mMarkPosition, 0.0f, 1.0f);
-        mRobScript.UpdateBarPosition(mMarkPosition);
+        mRobScript.UpdateBarPosition(0.9f);
 
     }
 
@@ -179,11 +180,17 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Update()
     {
-        float distance = Vector3.Distance(transform.position, victimGO.transform.position);
-
-        if(distance < stealDistance)
+        if (mRobbing)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            // TODO: Start robbing animation
+            mCurrentTheftDuration += Time.deltaTime;
+            UpdateRobSkillcheck();
+        }
+
+        float distance = Vector3.Distance(transform.position, victimGO.transform.position);
+        if (distance < stealDistance)
+        {
+            if (!mRobbing && Input.GetKeyDown(KeyCode.F))
             {
                 StartStealing();
             }
@@ -196,13 +203,6 @@ public class PlayerBehavior : MonoBehaviour
             StartCoroutine("SkillCheckTonyHawkStyle");
             startSkillCheck = false;
 
-        }
-
-        if(mRobbing)
-        {
-            // TODO: Start robbing animation
-            mCurrentTheftDuration += Time.deltaTime;
-            UpdateRobSkillcheck();
         }
     }
 
