@@ -282,6 +282,7 @@ MonoBehaviour:
   mTheftDuration: 20
   mTheftStarted: 0
   mTheftMarkSpeed: 0.5
+  fButtonGO: {fileID: 819618575170324607}
   mRobScript: {fileID: 1496607766932847939}
   mRobGO: {fileID: 1496607766932847938}
 --- !u!1 &1155152812200908993
