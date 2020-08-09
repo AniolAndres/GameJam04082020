@@ -40,6 +40,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public float mTheftMarkSpeed = 1;
     private float mMarkPosition = 0.01f;
+    public GameObject fButtonGO; 
 
     [Header("Theft animations")]
 
@@ -166,15 +167,10 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
         mMarkPosition += mTheftMarkSpeed * Time.deltaTime;
-        float AdaptedMarkPosition = mMarkPosition % 1;
+        mMarkPosition = mMarkPosition % 1;
 
-        if (mMarkPosition >= 2.0f)
-        {
-            mMissed = true;
-        }
-
-        AdaptedMarkPosition = Mathf.Clamp(AdaptedMarkPosition, 0.0f, 1.0f);
-        mRobScript.UpdateBarPosition(AdaptedMarkPosition);
+        mMarkPosition = Mathf.Clamp(mMarkPosition, 0.0f, 1.0f);
+        mRobScript.UpdateBarPosition(mMarkPosition);
 
     }
 
@@ -195,10 +191,23 @@ public class PlayerBehavior : MonoBehaviour
         float distance = Vector3.Distance(transform.position, victimGO.transform.position);
         if (distance < stealDistance)
         {
+            if (!mRobbing)
+            {
+                fButtonGO.SetActive(true);
+            }
+            else
+            {
+                fButtonGO.SetActive(false);
+            }
+
             if (!mRobbing && Input.GetKeyDown(KeyCode.F))
             {
                 StartStealing();
             }
+        }
+        else
+        {
+            fButtonGO.SetActive(false);
         }
 
         if (startSkillCheck)
