@@ -139,7 +139,6 @@ public class PlayerBehavior : MonoBehaviour
             mTheftStarted = false;
             mRobbing = false;
             mRobGO.SetActive(false);
-            Debug.Log("PIERDES PUTO TONTO");
             StartCoroutine("GameOverRoutine");
             return;
         }
@@ -149,7 +148,6 @@ public class PlayerBehavior : MonoBehaviour
             {
                 //TODO: WIN
                 victim.RobbedSuccessfuly();
-                Debug.Log("GANAS PUTO TONTO");
                 StartCoroutine("GameOverRoutine");
                 mTheftStarted = false;
                 mRobGO.SetActive(false);
@@ -161,7 +159,6 @@ public class PlayerBehavior : MonoBehaviour
                 mTheftStarted = false;
                 mRobbing = false;
                 mRobGO.SetActive(false);
-                Debug.Log("PIERDES PUTO TONTO");
                 StartCoroutine("GameOverRoutine");
                 return;
             }
