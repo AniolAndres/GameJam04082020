@@ -91,13 +91,6 @@ public class VictimBehavior : MonoBehaviour
             mTimeLooking += Time.deltaTime;
         } 
         mAnim.SetBool("Aware", mFollowingPlayer);
-
-        //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
-        //keep in mind that there is a cooldown, so probably it will not be activated too often
-        if(UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates - 1].mFloatValue) > Vector3.Distance(transform.position, mRobber.transform.position))
-        {
-            TriggerSkillcheckAlert();
-        }
     }
 
     //stops a skillcheck
@@ -118,6 +111,7 @@ public class VictimBehavior : MonoBehaviour
         {
             mDetectionWarning.SetActive(true);
             mFollowingPlayer = true;
+            mTimeSinceLastSkillCheck = 0.0f;
             Invoke("PlaySkillCheck", mSkillCheckDelay);
         }
     }
@@ -163,11 +157,7 @@ public class VictimBehavior : MonoBehaviour
                 //if closest distance, we just rob and end
                 if ((int)CurrentState > iterator)
                 {
-                    if(iterator == 0)
-                    {
-                        
-                    }
-                    else
+                    if(iterator > 0)
                     {
                         TriggerSkillcheckAlert();
                     }
