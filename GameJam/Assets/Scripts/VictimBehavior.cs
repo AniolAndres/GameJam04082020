@@ -33,6 +33,8 @@ public class VictimBehavior : MonoBehaviour
     private float mTimeInProximity = 0.0f;
     private Animator mAnim;
 
+    public float mSkillCheckDelay = 1.0f;
+
     public List<PairFloatString> mAlertTexts = new List<PairFloatString>((int)eAlertState.NumberOfStates);
 
     public eAlertState CurrentState = eAlertState.Safe;
@@ -48,7 +50,6 @@ public class VictimBehavior : MonoBehaviour
     ///////////////// Methods
     private void Start()
     {
-        mDetectionWarning.SetActive(true);
         CurrentState = (eAlertState)0;
         mDetectionWarning.GetComponent<TextMesh>().text = mAlertTexts[0].mStringValue;
         mAnim = gameObject.GetComponent<Animator>();
@@ -68,7 +69,7 @@ public class VictimBehavior : MonoBehaviour
             //keep in mind that there is a cooldown, so probably it will not be activated too often
             if (UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates - 1].mFloatValue*0.5f) > Dist)
             {
-                TriggerSkillcheck();
+                TriggerSkillcheckAlert();
             }
             mTimeSinceLastRandomSkillCheckTry = 0.0f;
         }
@@ -93,9 +94,9 @@ public class VictimBehavior : MonoBehaviour
 
         //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
         //keep in mind that there is a cooldown, so probably it will not be activated too often
-        if(UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates].mFloatValue) > Vector3.Distance(transform.position, mRobber.transform.position))
+        if(UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates - 1].mFloatValue) > Vector3.Distance(transform.position, mRobber.transform.position))
         {
-            TriggerSkillcheck();
+            TriggerSkillcheckAlert();
         }
     }
 
@@ -110,16 +111,22 @@ public class VictimBehavior : MonoBehaviour
     }
 
     //Triggers a skillcheck
-    void TriggerSkillcheck()
+    void TriggerSkillcheckAlert()
     {
         //cooldown
-        if(mTimeSinceLastSkillCheck >= mSkillcheckCoolDown)
+        if (mTimeSinceLastSkillCheck >= mSkillcheckCoolDown)
         {
-            mTimeLooking = 0;
+            mDetectionWarning.SetActive(true);
             mFollowingPlayer = true;
-            mTimeSinceLastSkillCheck = 0;
-            mRobber.ReceiveSkillCheckNotification(true);
+            Invoke("PlaySkillCheck", mSkillCheckDelay);
         }
+    }
+
+    void PlaySkillCheck()
+    {
+        mTimeLooking = 0;
+        mTimeSinceLastSkillCheck = 0;
+        mRobber.ReceiveSkillCheckNotification(true);
     }
 
     void VisualFollowing()
@@ -130,6 +137,7 @@ public class VictimBehavior : MonoBehaviour
         {
             StopSkillCheck();
             mRobber.ReceiveSkillCheckNotification(false);
+            mDetectionWarning.SetActive(false);
             return;
         }
        
@@ -161,7 +169,7 @@ public class VictimBehavior : MonoBehaviour
                     }
                     else
                     {
-                        TriggerSkillcheck();
+                        TriggerSkillcheckAlert();
                     }
                 }
                 //set vars up
