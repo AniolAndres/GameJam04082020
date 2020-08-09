@@ -29,14 +29,18 @@ public class PlayerBehavior : MonoBehaviour
 
     [Header("Theft skillcheck")]
 
-    public float    mTheftDuration = 10.0f;
-    private float   mCurrentTheftDuration = 0.0f;
-    private bool    mMissed = false;
-    public bool     mTheftStarted = false;
-    private bool    mRobbing = false;
+    public float mTheftDuration = 10.0f;
+    private float mCurrentTheftDuration = 0.0f;
+    private bool mMissed = false;
+    public bool mTheftStarted = false;
+    private bool mRobbing = false;
 
     public float mTheftMarkSpeed = 1;
     private float mMarkPosition = 0.01f;
+
+    [Header("Theft animations")]
+
+    private Animator anim;
 
     [SerializeField] private SkillCheckRobeti mRobScript;
     [SerializeField] private GameObject mRobGO;
@@ -56,7 +60,8 @@ public class PlayerBehavior : MonoBehaviour
 
         while (inSkillCheck && !skillcheckFailed)
         {
-            if(ignoreInputDelaySkillcheck < timer)
+            anim.SetBool("skillCheck", true);
+            if (ignoreInputDelaySkillcheck < timer)
             {
                 if (Input.GetKey(KeyCode.A))
                 {
@@ -157,11 +162,17 @@ public class PlayerBehavior : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        anim = gameObject.GetComponent<Animator>();
+    }
+
     private void Update()
     {
 
         if (startSkillCheck)
         {
+            // TODO: Start balance animation
             inSkillCheck = true;
             barGO.SetActive(true);
             StartCoroutine("SkillCheckTonyHawkStyle");
@@ -169,6 +180,7 @@ public class PlayerBehavior : MonoBehaviour
         }
         if(mRobbing)
         {
+            // TODO: Start robbing animation
             mCurrentTheftDuration += Time.deltaTime;
             UpdateRobSkillcheck();
         }
@@ -183,11 +195,22 @@ public class PlayerBehavior : MonoBehaviour
         movementDirection.z = Input.GetAxisRaw("Vertical");
         movementDirection.y = 0;
 
-        float sprintSpeedMultiplier = Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1.0f;
-        float slowSpeedMultiplier = Input.GetKey(KeyCode.LeftControl) ? slowMultiplier : 1.0f;
+        float speedMultiplier = 1.0f;
+
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            speedMultiplier = sprintMultiplier;
+        } 
+        else if (Input.GetKey(KeyCode.LeftControl))
+        {
+            speedMultiplier = slowMultiplier;
+        }
 
         transform.rotation = Quaternion.LookRotation(movementDirection);
-        transform.position += movementDirection * movementSpeed * Time.deltaTime * sprintSpeedMultiplier * slowSpeedMultiplier;
+        transform.position += movementDirection * movementSpeed * Time.deltaTime * speedMultiplier;
+        anim.SetBool("Idle", movementDirection == Vector3.zero);
+        anim.SetFloat("Speed", speedMultiplier);
+        Debug.Log(speedMultiplier);
     }
 
 }
