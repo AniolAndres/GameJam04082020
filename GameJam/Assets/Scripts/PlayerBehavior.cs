@@ -58,11 +58,11 @@ public class PlayerBehavior : MonoBehaviour
         float minPercent = 0.15f;
         float maxPercent = 0.85f;
         scScript.RefreshBarLimits(minPercent, maxPercent);
- 
+
+        anim.SetBool("skillCheck", true);
 
         while (inSkillCheck && !skillcheckFailed)
         {
-            anim.SetBool("skillCheck", true);
             if (ignoreInputDelaySkillcheck < timer)
             {
                 if (Input.GetKey(KeyCode.A))
@@ -95,6 +95,9 @@ public class PlayerBehavior : MonoBehaviour
             yield return null;
         }
 
+        if(!skillcheckFailed)
+            anim.SetBool("skillCheck", false);
+
         barGO.SetActive(false);
 
     }
@@ -113,8 +116,9 @@ public class PlayerBehavior : MonoBehaviour
     private IEnumerator GameOverRoutine()
     {
         isInGameOver = true;
+        anim.SetBool("failedSkillCheck", true);
 
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(3.0f);
 
         SceneManager.LoadScene("GrayBox");
     }
@@ -187,12 +191,13 @@ public class PlayerBehavior : MonoBehaviour
 
         if (startSkillCheck)
         {
-            // TODO: Start balance animation
             inSkillCheck = true;
             barGO.SetActive(true);
             StartCoroutine("SkillCheckTonyHawkStyle");
             startSkillCheck = false;
+
         }
+
         if(mRobbing)
         {
             // TODO: Start robbing animation

@@ -85,7 +85,8 @@ public class VictimBehavior : MonoBehaviour
     {
         mTimeSinceLastSkillCheck += Time.deltaTime;
         ProximityDetection();
-        if(mFollowingPlayer)
+        mAnim.SetBool("Aware", mFollowingPlayer);
+        if (mFollowingPlayer)
         {
             VisualFollowing();
             mTimeLooking += Time.deltaTime;
@@ -127,7 +128,7 @@ public class VictimBehavior : MonoBehaviour
     {
         //TODO(@Roger): move this logics to the player
         //if time's up, we stop looking at player
-        if(mTimeLooking >= mFocusTime)
+        if (mTimeLooking >= mFocusTime)
         {
             StopSkillCheck();
             mRobber.ReceiveSkillCheckNotification(false);
@@ -175,7 +176,7 @@ public class VictimBehavior : MonoBehaviour
 
     public void RobbedSuccessfuly()
     {
-        mAnim.SetBool("Robbed", true);
+        mAnim.SetBool("Robbed".Length, true);
     }
 
 }
