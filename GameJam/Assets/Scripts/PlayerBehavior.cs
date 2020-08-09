@@ -166,10 +166,15 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
         mMarkPosition += mTheftMarkSpeed * Time.deltaTime;
-        mMarkPosition = mMarkPosition % 1;
+        float AdaptedMarkPosition = mMarkPosition % 1;
 
-        mMarkPosition = Mathf.Clamp(mMarkPosition, 0.0f, 1.0f);
-        mRobScript.UpdateBarPosition(mMarkPosition);
+        if (mMarkPosition >= 2.0f)
+        {
+            mMissed = true;
+        }
+
+        AdaptedMarkPosition = Mathf.Clamp(AdaptedMarkPosition, 0.0f, 1.0f);
+        mRobScript.UpdateBarPosition(AdaptedMarkPosition);
 
     }
 
