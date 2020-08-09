@@ -169,7 +169,7 @@ public class PlayerBehavior : MonoBehaviour
         mMarkPosition = mMarkPosition % 1;
 
         mMarkPosition = Mathf.Clamp(mMarkPosition, 0.0f, 1.0f);
-        mRobScript.UpdateBarPosition(mMarkPosition);
+        mRobScript.UpdateBarPosition(0.9f);
 
     }
 
