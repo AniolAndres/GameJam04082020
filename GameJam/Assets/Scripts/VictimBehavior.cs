@@ -165,7 +165,7 @@ public class VictimBehavior : MonoBehaviour
                 {
                     if(iterator == 0)
                     {
-                        mRobber.StartStealing();
+                        
                     }
                     else
                     {

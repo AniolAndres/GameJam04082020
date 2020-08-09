@@ -8,6 +8,8 @@ public class PlayerBehavior : MonoBehaviour
     [Header("Victim references")]
 
     public VictimBehavior victim;
+    public GameObject victimGO;
+    public float stealDistance = 10.0f;
 
     [Header("Movement Zone")]
 
@@ -132,6 +134,7 @@ public class PlayerBehavior : MonoBehaviour
             mRobbing = false;
             mRobGO.SetActive(false);
             Debug.Log("PIERDES PUTO TONTO");
+            StartCoroutine("GameOverRoutine");
             return;
         }
         if (Input.GetKey(KeyCode.Space))
@@ -141,6 +144,7 @@ public class PlayerBehavior : MonoBehaviour
                 //TODO: WIN
                 victim.RobbedSuccessfuly();
                 Debug.Log("GANAS PUTO TONTO");
+                StartCoroutine("GameOverRoutine");
                 mTheftStarted = false;
                 mRobbing = false;
                 mRobGO.SetActive(false);
@@ -153,6 +157,7 @@ public class PlayerBehavior : MonoBehaviour
                 mRobbing = false;
                 mRobGO.SetActive(false);
                 Debug.Log("PIERDES PUTO TONTO");
+                StartCoroutine("GameOverRoutine");
                 return;
             }
         }
@@ -170,6 +175,15 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Update()
     {
+        float distance = Vector3.Distance(transform.position, victimGO.transform.position);
+
+        if(distance < stealDistance)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                StartStealing();
+            }
+        }
 
         if (startSkillCheck)
         {
