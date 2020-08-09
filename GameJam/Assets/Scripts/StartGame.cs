@@ -29,34 +29,49 @@ public class StartGame : MonoBehaviour
 
     private Vector3 cameraInitialPosition;
 
+    enum CameraState
+    {
+        VictimPreview,
+        FollowingPlayer
+    }
+    CameraState mCurrentCameraState = CameraState.VictimPreview;
+
     void Start()
     {
+        mCurrentCameraState = CameraState.VictimPreview;
+        victimPosition.transform.Find("VictimInfo").gameObject.SetActive(true);
+
         goText = transform.GetComponentInChildren<Text>();
-        StartCoroutine("EnableVictimPreview");
         cameraInitialPosition = gameCamera.transform.position;
+        
     }
 
     private void FixedUpdate()
     {
-        if(isPreviewingVictim) 
-        { 
-            VictimPreview();
-        }
-
-        if (isLerpingToPlayer)
+        switch (mCurrentCameraState)
         {
-            LerpCameraToPlayer();
-        }
+            case CameraState.VictimPreview:
+            {
+                VictimPreview();
+                if (Input.anyKey)
+                {
+                    victimPosition.transform.Find("VictimInfo").gameObject.SetActive(false);
+                    mCurrentCameraState = CameraState.FollowingPlayer;
+                    playerPosition.transform.GetComponent<PlayerBehavior>().enabled = true;
+                }
+            }
+            break;
+            case CameraState.FollowingPlayer:
+            {                
+                Vector3 targetPosition = playerPosition.transform.position + cameraFollowDisplacement;
+                gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, targetPosition, smoothFactorCamera * Time.deltaTime);
 
-        if(isEnablingPlayerMovement)
-        {
-            StartTextFadingAndUI();
-        }
+                    Vector3 CenterPositionLookat = (playerPosition.transform.position + victimPosition.transform.position) * 0.5f;
 
-        if(cameraFollowPlayer)
-        {
-            Vector3 targetPosition = playerPosition.transform.position + cameraFollowDisplacement;
-            gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, targetPosition, smoothFactorCamera * Time.deltaTime);
+                Vector3 targetLookatPosition = playerPosition.transform.position + (Vector3.up * 50);
+                gameCamera.transform.rotation = Quaternion.RotateTowards(gameCamera.transform.rotation, Quaternion.LookRotation(CenterPositionLookat - gameCamera.transform.position), Time.time * 0.1f);
+            }
+            break;
         }
     }
 
@@ -84,51 +99,4 @@ public class StartGame : MonoBehaviour
         gameCamera.transform.LookAt(playerPosition.transform);
         gameCamera.transform.position = position;
     }
-
-    void StartTextFadingAndUI()
-    {
-        if(goText.fontSize <= 150)
-            goText.fontSize += 2;
-    }
-
-    IEnumerator EnableVictimPreview()
-    {
-        victimPosition.transform.Find("VictimInfo").gameObject.SetActive(true);
-        isPreviewingVictim = true;
-
-        while (!Input.anyKey)
-            yield return null;
-
-        isPreviewingVictim = false;
-        victimPosition.transform.Find("VictimInfo").gameObject.SetActive(false);
-
-        StartCoroutine("EnableLerpCameraToPlayer");
-    }
-
-    IEnumerator EnableLerpCameraToPlayer()
-    {
-        isLerpingToPlayer = true;
-
-        while (isLerpingToPlayer)
-            yield return null;
-
-        
-        StartCoroutine("EnablePlayerMovement");
-        
-    }
-
-    IEnumerator EnablePlayerMovement()
-    {
-        isEnablingPlayerMovement = true;
-
-        while (goText.fontSize < maxGoSize)
-            yield return null;
-
-        cameraFollowPlayer = true;
-        isEnablingPlayerMovement = false;
-        playerPosition.transform.GetComponent<PlayerBehavior>().enabled = true;
-    }
-
-
-
 }

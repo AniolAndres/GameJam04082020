@@ -54,11 +54,17 @@ public class VictimBehavior : MonoBehaviour
 
     private void CheckPlayRandomSkillChecks()
     {
-        if(mTimeSinceLastRandomSkillCheckTry >= mTimeBetweenRandomSkillChecksTry)
+        float Dist = Vector3.Distance(transform.position, mRobber.transform.position);
+        //if we are in range of robeti skill check, leave
+        if(Dist < mAlertTexts[0].mFloatValue)
+        {
+            return;
+        }
+        if (mTimeSinceLastRandomSkillCheckTry >= mTimeBetweenRandomSkillChecksTry)
         {
             //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
             //keep in mind that there is a cooldown, so probably it will not be activated too often
-            if (UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates - 1].mFloatValue*0.5f) > Vector3.Distance(transform.position, mRobber.transform.position))
+            if (UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates - 1].mFloatValue*0.5f) > Dist)
             {
                 TriggerSkillcheck();
             }
