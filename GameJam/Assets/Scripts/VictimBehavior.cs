@@ -47,12 +47,15 @@ public class VictimBehavior : MonoBehaviour
     public float mTimeBetweenRandomSkillChecksTry = 5.0f;
     private float mTimeSinceLastRandomSkillCheckTry = 0;
 
+    private AudioSource mAlertSound;
+
     ///////////////// Methods
     private void Start()
     {
         CurrentState = (eAlertState)0;
         mDetectionWarning.GetComponent<TextMesh>().text = mAlertTexts[0].mStringValue;
         mAnim = gameObject.GetComponent<Animator>();
+        mAlertSound = gameObject.GetComponent<AudioSource>();
     }
 
     private void CheckPlayRandomSkillChecks()
@@ -110,6 +113,7 @@ public class VictimBehavior : MonoBehaviour
         //cooldown
         if (mTimeSinceLastSkillCheck >= mSkillcheckCoolDown)
         {
+            mAlertSound.Play();
             mDetectionWarning.SetActive(true);
             mFollowingPlayer = true;
             mTimeSinceLastSkillCheck = 0.0f;
