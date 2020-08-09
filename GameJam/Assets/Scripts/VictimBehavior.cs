@@ -182,7 +182,7 @@ public class VictimBehavior : MonoBehaviour
 
     public void RobbedSuccessfuly()
     {
-        mAnim.SetBool("Robbed".Length, true);
+        mAnim.SetBool("Robbed", true);
     }
 
 }
