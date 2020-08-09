@@ -180,7 +180,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         anim = gameObject.GetComponent<Animator>();
         mFootsetpSound = gameObject.GetComponent<AudioSource>();
-        mFootsetpSound.Play();
+        mFootsetpSound.pitch = 1.75f;
     }
 
     private void Update()
@@ -264,7 +264,7 @@ public class PlayerBehavior : MonoBehaviour
             mFootsetpSound.Stop();
             mFootsetpSound.Play();
             speedMultiplier = 1.0f;
-            mFootsetpSound.pitch = 1.8f;
+            mFootsetpSound.pitch = 1.75f;
         }
 
         transform.rotation = Quaternion.LookRotation(movementDirection);
