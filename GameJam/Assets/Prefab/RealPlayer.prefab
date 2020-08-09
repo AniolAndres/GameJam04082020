@@ -185,7 +185,7 @@ MonoBehaviour:
   barGO: {fileID: 3022119605037702094}
   mTheftDuration: 20
   mTheftStarted: 0
-  mTheftMarkSpeed: 2
+  mTheftMarkSpeed: 0.5
   mRobScript: {fileID: 1496607766932847939}
   mRobGO: {fileID: 1496607766932847938}
 --- !u!1 &1155152812200908993

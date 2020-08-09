@@ -28,10 +28,12 @@ public class StartGame : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
 
     private Vector3 cameraInitialPosition;
+    private Quaternion cameraInitialRotation;
 
     enum CameraState
     {
         VictimPreview,
+        LerpToPlayer,
         FollowingPlayer
     }
     CameraState mCurrentCameraState = CameraState.VictimPreview;
@@ -43,7 +45,8 @@ public class StartGame : MonoBehaviour
 
         goText = transform.GetComponentInChildren<Text>();
         cameraInitialPosition = gameCamera.transform.position;
-        
+
+ 
     }
 
     private void FixedUpdate()
@@ -56,20 +59,30 @@ public class StartGame : MonoBehaviour
                 if (Input.anyKey)
                 {
                     victimPosition.transform.Find("VictimInfo").gameObject.SetActive(false);
-                    mCurrentCameraState = CameraState.FollowingPlayer;
+                    mCurrentCameraState = CameraState.LerpToPlayer;
                     playerPosition.transform.GetComponent<PlayerBehavior>().enabled = true;
+                    cameraInitialPosition = gameCamera.transform.position;
                 }
             }
             break;
+            case CameraState.LerpToPlayer:
+
+                bool finished = LerpCameraToPlayer();
+                if (finished)
+                {
+                    mCurrentCameraState = CameraState.FollowingPlayer;
+                }
+
+                break;
             case CameraState.FollowingPlayer:
             {                
                 Vector3 targetPosition = playerPosition.transform.position + cameraFollowDisplacement;
                 gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, targetPosition, smoothFactorCamera * Time.deltaTime);
 
-                    Vector3 CenterPositionLookat = (playerPosition.transform.position + victimPosition.transform.position) * 0.5f;
+                Vector3 CenterPositionLookat = (playerPosition.transform.position + victimPosition.transform.position) * 0.5f;
 
                 Vector3 targetLookatPosition = playerPosition.transform.position + (Vector3.up * 50);
-                gameCamera.transform.rotation = Quaternion.RotateTowards(gameCamera.transform.rotation, Quaternion.LookRotation(CenterPositionLookat - gameCamera.transform.position), Time.time * 0.1f);
+                gameCamera.transform.rotation = Quaternion.RotateTowards(gameCamera.transform.rotation, Quaternion.LookRotation(CenterPositionLookat - gameCamera.transform.position), smoothFactorCamera * Time.deltaTime);
             }
             break;
         }
@@ -80,8 +93,10 @@ public class StartGame : MonoBehaviour
         gameCamera.transform.RotateAround(victimPosition.transform.position, Vector3.up, cameraRotationSpeed * Time.deltaTime);
     }
 
-    void LerpCameraToPlayer()
+    bool LerpCameraToPlayer()
     {
+        bool result = false;
+
         lerpTimer += Time.deltaTime;
 
         float interpolation = lerpTimer / cameraLerpDuration;
@@ -90,13 +105,20 @@ public class StartGame : MonoBehaviour
         {
             interpolation = 1.0f;
             isLerpingToPlayer = false;
+            result = true;
+        }
+        else
+        {
+            result = false;
         }
 
         Vector3 position = gameCamera.transform.position;
         position.z = Mathf.Lerp(cameraInitialPosition.z, finalCameraPosition.position.z, interpolation);
         position.x = Mathf.Lerp(cameraInitialPosition.x, finalCameraPosition.position.x, interpolation);
 
-        gameCamera.transform.LookAt(playerPosition.transform);
+        gameCamera.transform.LookAt(victimPosition.transform.position);
         gameCamera.transform.position = position;
+
+        return result;
     }
 }
