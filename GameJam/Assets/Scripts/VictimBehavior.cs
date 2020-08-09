@@ -47,6 +47,7 @@ public class VictimBehavior : MonoBehaviour
     public float mTimeBetweenRandomSkillChecksTry = 5.0f;
     private float mTimeSinceLastRandomSkillCheckTry = 0;
 
+    private float randomSCDuration;
     private AudioSource mAlertSound;
 
     ///////////////// Methods
@@ -126,13 +127,14 @@ public class VictimBehavior : MonoBehaviour
         mTimeLooking = 0;
         mTimeSinceLastSkillCheck = 0;
         mRobber.ReceiveSkillCheckNotification(true);
+        randomSCDuration = UnityEngine.Random.Range(1.0f, 3.0f);
     }
 
     void VisualFollowing()
     {
         //TODO(@Roger): move this logics to the player
         //if time's up, we stop looking at player
-        if (mTimeLooking >= mFocusTime)
+        if (mTimeLooking >= mFocusTime + randomSCDuration)
         {
             StopSkillCheck();
             mRobber.ReceiveSkillCheckNotification(false);
