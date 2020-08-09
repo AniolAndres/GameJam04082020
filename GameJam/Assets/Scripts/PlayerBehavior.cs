@@ -52,7 +52,7 @@ public class PlayerBehavior : MonoBehaviour
     private IEnumerator SkillCheckTonyHawkStyle()
     {
         float timer = 0.0f;
-        float currentAcceleration = 0.0f;
+        float currentAcceleration = 0.3f;
         float markPosition = 0.5f;
         float currentSpeed = 0.05f;
         bool skillcheckFailed = false;
@@ -69,15 +69,15 @@ public class PlayerBehavior : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.A))
                 {
-                    currentAcceleration += 4.0f;
+                    currentAcceleration += 6.0f;
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
-                    currentAcceleration -= 4.0f;
+                    currentAcceleration -= 6.0f;
                 }
             }
 
-            currentAcceleration = Mathf.Clamp(currentAcceleration, -2.0f, 2.0f);
+            currentAcceleration = Mathf.Clamp(currentAcceleration, -3.0f, 3.0f);
 
             currentSpeed += currentAcceleration * Time.deltaTime;
             markPosition += currentSpeed * Time.deltaTime;
