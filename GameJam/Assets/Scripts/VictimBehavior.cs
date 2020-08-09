@@ -41,6 +41,8 @@ public class VictimBehavior : MonoBehaviour
 
     public float mSkillcheckCoolDown = 5;    //Cooldown Between skillchecks
     private float mTimeSinceLastSkillCheck = 0;
+    public float mTimeBetweenRandomSkillChecksTry = 5.0f;
+    private float mTimeSinceLastRandomSkillCheckTry = 0;
 
     ///////////////// Methods
     private void Start()
@@ -48,6 +50,26 @@ public class VictimBehavior : MonoBehaviour
         mDetectionWarning.SetActive(true);
         CurrentState = (eAlertState)0;
         mDetectionWarning.GetComponent<TextMesh>().text = mAlertTexts[0].mStringValue;
+    }
+
+    private void CheckPlayRandomSkillChecks()
+    {
+        if(mTimeSinceLastRandomSkillCheckTry >= mTimeBetweenRandomSkillChecksTry)
+        {
+            //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
+            //keep in mind that there is a cooldown, so probably it will not be activated too often
+            if (UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates - 1].mFloatValue*0.5f) > Vector3.Distance(transform.position, mRobber.transform.position))
+            {
+                TriggerSkillcheck();
+            }
+            mTimeSinceLastRandomSkillCheckTry = 0.0f;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        mTimeSinceLastRandomSkillCheckTry += Time.deltaTime;
+        CheckPlayRandomSkillChecks();
     }
 
     void Update()
@@ -58,12 +80,6 @@ public class VictimBehavior : MonoBehaviour
         {
             VisualFollowing();
             mTimeLooking += Time.deltaTime;
-        }
-        //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
-        //keep in mind that there is a cooldown, so probably it will not be activated too often
-        if(UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates].mFloatValue) > Vector3.Distance(transform.position, mRobber.transform.position))
-        {
-            TriggerSkillcheck();
         }
     }
 

@@ -210,7 +210,6 @@ public class PlayerBehavior : MonoBehaviour
         transform.position += movementDirection * movementSpeed * Time.deltaTime * speedMultiplier;
         anim.SetBool("Idle", movementDirection == Vector3.zero);
         anim.SetFloat("Speed", speedMultiplier);
-        Debug.Log(speedMultiplier);
     }
 
 }
