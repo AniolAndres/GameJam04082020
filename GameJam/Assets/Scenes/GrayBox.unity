@@ -1229,6 +1229,16 @@ PrefabInstance:
       propertyPath: victim
       value: 
       objectReference: {fileID: 312438079466555637}
+    - target: {fileID: 958081723759110465, guid: 38d2b8bde2ed7d14082f3c327de4142d,
+        type: 3}
+      propertyPath: victimGO
+      value: 
+      objectReference: {fileID: 312438079466555636}
+    - target: {fileID: 3022119605037702094, guid: 38d2b8bde2ed7d14082f3c327de4142d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4256063931155635027, guid: 38d2b8bde2ed7d14082f3c327de4142d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1425,11 +1435,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2304069138228923487, guid: d6beb5c89cea06f4b88d1e0bcdb6501b,
         type: 3}
-      propertyPath: mDetectionWarning
-      value: 
-      objectReference: {fileID: 4358756158478825526}
-    - target: {fileID: 2304069138228923487, guid: d6beb5c89cea06f4b88d1e0bcdb6501b,
-        type: 3}
       propertyPath: mRobber
       value: 
       objectReference: {fileID: 2646836219190758035}
@@ -1440,12 +1445,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6beb5c89cea06f4b88d1e0bcdb6501b, type: 3}
---- !u!1 &4358756158478825526 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4337535384256172158, guid: d6beb5c89cea06f4b88d1e0bcdb6501b,
-    type: 3}
-  m_PrefabInstance: {fileID: 4358756158478825525}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5006512735244168365 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4294931571328657039, guid: dae15e7067d0dc644a2ebbc8652a137a,

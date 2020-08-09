@@ -760,6 +760,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mDistanceThreshold: 1
   mFocusTime: 2.5
+  mSkillCheckDelay: 1
   mAlertTexts:
   - mFloatValue: 5
     mStringValue: MU SERKA
@@ -772,9 +773,10 @@ MonoBehaviour:
   - mFloatValue: 50
     mStringValue: SALBO
   CurrentState: 0
-  mDetectionWarning: {fileID: 0}
+  mDetectionWarning: {fileID: 4337535384256172158}
   mRobber: {fileID: 0}
   mSkillcheckCoolDown: 5
+  mTimeBetweenRandomSkillChecksTry: 5
 --- !u!1 &4115039025840459160
 GameObject:
   m_ObjectHideFlags: 0

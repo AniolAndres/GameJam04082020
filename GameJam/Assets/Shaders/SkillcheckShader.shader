@@ -3,6 +3,9 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+		_BackgroundColor("Background Color", Color) = (1, 1, 1, 1)
+		_ClickzoneColor("ClickZone Color", Color) = (1, 0, 0, 1)
+		_MarkColor("Mark Color", Color) = (0, 0, 0, 1)
 		_Min("Min", Float) = 0.25
 		_Max("Max", Float) = 0.75
 		_MarkPosition("MarkPosition", Float) = 0.5
@@ -25,6 +28,9 @@
 			float _Max;
 			float _MarkPosition;
 			float _MarkWidth;
+			float4 _BackgroundColor;
+			float4 _ClickzoneColor;
+			float4 _MarkColor;
 
             struct appdata
             {
@@ -58,19 +64,16 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
-				float4 colorWhite = float4(1.0f,1.0f,1.0f,1.0f);
-				float4 colorRed = float4(1.0f, 0.0f, 0.0f, 1.0f);
-				float4 colorBlack = float4(0.0f, 0.0f, 0.0f, 1.0f);
 				float stepRight = step(i.uv.x, _Min);
 				float stepLeft = step(_Max, i.uv.x);
-				float4 color = lerp(colorWhite, colorRed, max(stepRight, stepLeft));
+				float4 color = lerp(_BackgroundColor, _ClickzoneColor, max(stepRight, stepLeft));
 
 				float stepMark1 = step( _MarkPosition + _MarkWidth / 2, i.uv.x );
 				float stepMark2 = step(i.uv.x, _MarkPosition - _MarkWidth / 2);
 
 				float stepResult = stepMark1 + stepMark2;
 				float remap = Remap(stepResult, 1.0f, 0.0f, 0.0f, 1.0f);
-				color = lerp(color, colorBlack, remap);
+				color = lerp(color, _MarkColor, remap);
 
                 return color;
             }

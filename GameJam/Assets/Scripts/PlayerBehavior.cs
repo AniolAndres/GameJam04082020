@@ -106,7 +106,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         mTheftStarted = true;
         mRobbing = true;
-
+        mMarkPosition = 0.0f;
         mRobGO.SetActive(true);
 
         mRobScript.RefreshBarLimits(0.4f, 0.6f); //yes xd

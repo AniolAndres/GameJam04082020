@@ -176,6 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   victim: {fileID: 0}
+  victimGO: {fileID: 0}
+  stealDistance: 10
   movementSpeed: 1.25
   sprintMultiplier: 1.25
   slowMultiplier: 0.25
@@ -245,13 +247,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496607766932847938}
-  m_LocalRotation: {x: 0.00000014901161, y: -0.7071068, z: 0.7071068, w: 0.00000014901161}
-  m_LocalPosition: {x: 1.9916472, y: 0.72022533, z: 0.26244688}
+  m_LocalRotation: {x: 0.5000001, y: -0.4999999, z: 0.5000001, w: -0.4999999}
+  m_LocalPosition: {x: 0.49, y: 1.155, z: -0.071}
   m_LocalScale: {x: 0.03560792, y: 0.118692905, z: 0.035607893}
   m_Children: []
   m_Father: {fileID: 4256063931155635027}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 90, y: -90, z: 89.99999}
+  m_LocalEulerAnglesHint: {x: 180, y: -90, z: 89.99999}
 --- !u!33 &2372307699712133452
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -499,7 +501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3022119605037702095
 Transform:
   m_ObjectHideFlags: 0

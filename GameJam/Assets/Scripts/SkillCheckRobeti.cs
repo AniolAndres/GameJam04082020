@@ -16,6 +16,7 @@ public class SkillCheckRobeti : MonoBehaviour
     {
         myRenderer.material.SetFloat("_Min", min);
         myRenderer.material.SetFloat("_Max", max);
+        myRenderer.material.SetFloat("_MarkPosition", 0.0f);
         transform.LookAt((transform.position + mainCamera.rotation * Vector3.up), (mainCamera.rotation * Vector3.up));
     }
 
