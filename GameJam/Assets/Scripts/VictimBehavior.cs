@@ -31,6 +31,7 @@ public class VictimBehavior : MonoBehaviour
     private float mTimeLooking = 0.0f;
     private bool mFollowingPlayer = false;
     private float mTimeInProximity = 0.0f;
+    private Animator mAnim;
 
     public List<PairFloatString> mAlertTexts = new List<PairFloatString>((int)eAlertState.NumberOfStates);
 
@@ -50,6 +51,7 @@ public class VictimBehavior : MonoBehaviour
         mDetectionWarning.SetActive(true);
         CurrentState = (eAlertState)0;
         mDetectionWarning.GetComponent<TextMesh>().text = mAlertTexts[0].mStringValue;
+        mAnim = gameObject.GetComponent<Animator>();
     }
 
     private void CheckPlayRandomSkillChecks()
@@ -86,6 +88,14 @@ public class VictimBehavior : MonoBehaviour
         {
             VisualFollowing();
             mTimeLooking += Time.deltaTime;
+        } 
+        mAnim.SetBool("Aware", mFollowingPlayer);
+
+        //if a random between the closest skillcheck and the furthest is bigger thatn the current distance, we call to trigger a skillcheck
+        //keep in mind that there is a cooldown, so probably it will not be activated too often
+        if(UnityEngine.Random.Range(mAlertTexts[0].mFloatValue, mAlertTexts[(int)eAlertState.NumberOfStates].mFloatValue) > Vector3.Distance(transform.position, mRobber.transform.position))
+        {
+            TriggerSkillcheck();
         }
     }
 
@@ -96,11 +106,6 @@ public class VictimBehavior : MonoBehaviour
         {
             mTimeLooking = 0;
             mFollowingPlayer = false;
-            float distractedX = transform.position.x - transform.forward.x;
-            float distractedY = transform.position.y;
-            float distractedZ = transform.position.z - transform.forward.z;
-            Vector3 LookAtPos = new Vector3(distractedX, distractedY, distractedZ);
-            transform.LookAt(LookAtPos);
         }
     }
 
@@ -127,8 +132,9 @@ public class VictimBehavior : MonoBehaviour
             mRobber.ReceiveSkillCheckNotification(false);
             return;
         }
-        transform.LookAt(mRobber.transform.position);
-        
+       
+        // transform.LookAt(mRobber.transform.position);
+
     }
 
     void ProximityDetection()
