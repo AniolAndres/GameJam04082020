@@ -139,6 +139,7 @@ public class PlayerBehavior : MonoBehaviour
             if(0.4f <= mMarkPosition && mMarkPosition <= 0.6f)
             {
                 //TODO: WIN
+                victim.RobbedSuccessfuly();
                 Debug.Log("GANAS PUTO TONTO");
                 mTheftStarted = false;
                 mRobbing = false;

@@ -104,7 +104,7 @@ public class VictimBehavior : MonoBehaviour
     {
         if(mFollowingPlayer)
         {
-            mTimeLooking = 0;
+            mTimeLooking = 0f;
             mFollowingPlayer = false;
         }
     }
@@ -173,6 +173,11 @@ public class VictimBehavior : MonoBehaviour
 
             ++iterator;
         }
+    }
+
+    public void RobbedSuccessfuly()
+    {
+        mAnim.SetBool("Robbed", true);
     }
 
 }
