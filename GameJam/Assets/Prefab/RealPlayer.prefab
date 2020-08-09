@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 1605767008971326796}
   - component: {fileID: 1496607766932847939}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: SkillCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -508,7 +508,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3022119605037702094}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.0917825, y: 1.7387121, z: 0.053257897}
+  m_LocalPosition: {x: 0, y: 1.297, z: 0}
   m_LocalScale: {x: 0.18514876, y: 0.6872382, z: 0.008123157}
   m_Children: []
   m_Father: {fileID: 4256063931155635027}

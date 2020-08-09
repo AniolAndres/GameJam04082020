@@ -102,8 +102,8 @@ public class VictimBehavior : MonoBehaviour
                     else
                     {
                         mTimeLooking = 0;
-                        //mFollowingPlayer = true;
-                        //mRobber.ReceiveSkillCheckNotification(true);
+                        mFollowingPlayer = true;
+                        mRobber.ReceiveSkillCheckNotification(true);
                     }
                 }
                 //set vars up
